@@ -22,7 +22,7 @@ spec:
       destination:
         #name: in-cluster
         server: https://kubernetes.default.svc
-        namespace: kube-system
+        namespace: testing3
       syncPolicy:
         automated:
           prune: true
