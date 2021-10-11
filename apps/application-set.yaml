@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: application-set
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/verjaga/argocd.git
+      revision: main
+      directories:
+      - path: sys-global-services-apps/kube-system/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: sys-global-services-apps
+      source:
+        repoURL: https://github.com/UserZoomSystems/systems-argocd-apps.git
+        targetRevision: feature/UZ-42544_first-applications-deployment
+        path: '{{path}}'
+      destination:
+        #name: in-cluster
+        server: https://kubernetes.default.svc
+        namespace: kube-system
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
